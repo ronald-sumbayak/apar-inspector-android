@@ -2,6 +2,7 @@
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
@@ -17,6 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:background="@color/colorPrimary"
+            android:elevation="4dp"
             app:stl_clickable="true"
             app:stl_defaultTabBackground="?attr/selectableItemBackground"
             app:stl_defaultTabTextAllCaps="true"
@@ -42,6 +44,7 @@
             app:stl_titleOffset="24dp"
             app:stl_underlineColor="@android:color/black"
             app:stl_underlineThickness="0dp"
+            tools:targetApi="lollipop"
             />
     
         <android.support.v4.view.ViewPager

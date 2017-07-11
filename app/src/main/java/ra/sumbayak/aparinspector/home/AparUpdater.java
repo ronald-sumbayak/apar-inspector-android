@@ -7,6 +7,8 @@ import android.support.v4.app.FragmentActivity;
 import android.util.SparseArray;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import ra.sumbayak.aparinspector.GlobalLoadingDialog;
@@ -81,13 +83,17 @@ class AparUpdater {
                 @Override
                 public void onFailure (@NonNull Call<List<Apar>> call, @NonNull Throwable t) {
                     t.printStackTrace ();
+                    HomeActivity.aparList = new ArrayList<> ();
+                    HomeActivity.aparMap  = new SparseArray<> ();
                     GlobalLoadingDialog.hide ();
                     Toast.makeText (context, "Loading data failed", Toast.LENGTH_SHORT).show ();
+                    listener.onUpdateFailed ();
                 }
             });
     }
     
     interface OnAparUpdateListener {
         void onUpdate ();
+        void onUpdateFailed ();
     }
 }

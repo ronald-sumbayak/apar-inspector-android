@@ -2,6 +2,7 @@ package ra.sumbayak.aparinspector.home;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
@@ -9,10 +10,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -37,6 +35,7 @@ public class InspectionFragment extends DialogFragment {
     @BindView (R.id.kapasitas) TextView kapasitas;
     @BindView (R.id.kondisi) RadioGroup kondisi;
     @BindView (R.id.catatan) TextInputEditText catatan;
+    @BindView (R.id.confirm) Button confirm;
     private Apar apar;
     private View view;
     
@@ -76,6 +75,13 @@ public class InspectionFragment extends DialogFragment {
         nomorLokasi.setText (apar.nomorLokasi);
         jenis.setText (apar.jenis);
         kapasitas.setText (apar.kapasitas ());
+        confirm.setEnabled (false);
+        kondisi.setOnCheckedChangeListener (new RadioGroup.OnCheckedChangeListener () {
+            @Override
+            public void onCheckedChanged (RadioGroup group, @IdRes int checkedId) {
+                confirm.setEnabled (true);
+            }
+        });
         return view;
     }
     

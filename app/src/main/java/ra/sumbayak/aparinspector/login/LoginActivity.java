@@ -60,9 +60,9 @@ public class LoginActivity extends AppCompatActivity {
                     SharedPreferences.Editor editor = getSharedPreferences (SPNAME, MODE_PRIVATE).edit ();
                     editor.putString (SPKEY_TOKEN, token);
                     editor.apply ();
-                    
-                    authenticate ();
+    
                     GlobalLoadingDialog.hide ();
+                    authenticate ();
                 }
                 else {
                     GlobalLoadingDialog.hide ();

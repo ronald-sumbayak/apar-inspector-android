@@ -15,9 +15,7 @@
         android:layout_height="?attr/actionBarSize"
         android:layout_weight="0"
         android:background="@color/colorPrimary"
-        android:elevation="4dp"
         app:titleTextColor="@android:color/white"
-        tools:targetApi="lollipop"
         />
     
     <FrameLayout
@@ -35,11 +33,12 @@
         android:layout_height="wrap_content"
         android:layout_weight="0"
         android:background="@color/colorPrimary"
-        app:elevation="4dp"
+        android:elevation="4dp"
         app:itemBackground="@color/colorPrimary"
         app:itemIconTint="@drawable/bottom_navigation"
         app:itemTextColor="@drawable/bottom_navigation"
         app:menu="@menu/home_bottom_navigation"
+        tools:targetApi="lollipop"
         />
     
 </LinearLayout>

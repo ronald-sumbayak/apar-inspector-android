@@ -61,6 +61,11 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
         replaceFragment (new AparListPage ());
     }
     
+    @Override
+    public void onUpdateFailed () {
+        
+    }
+    
     private void replaceFragment (Fragment fragment) {
         getSupportFragmentManager ()
             .beginTransaction ()
@@ -82,6 +87,11 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
                 public void onUpdate () {
                     Fragment fragment = bnvIndex == 0 ? new AparListPage () : new ReportFragment ();
                     replaceFragment (fragment);
+                }
+    
+                @Override
+                public void onUpdateFailed () {
+        
                 }
             }); return true;
             case R.id.logout: logout (); return true;

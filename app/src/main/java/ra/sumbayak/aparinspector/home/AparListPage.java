@@ -37,7 +37,6 @@ public class AparListPage extends Fragment implements AsyncExpandableListViewCal
         super.onCreate (savedInstanceState);
         if (getArguments () != null) 
             filter = getArguments ().getString (REPORT_PAGE_FILTER_TAG);
-        aparList = HomeActivity.aparList;
     }
     
     @Nullable
@@ -65,6 +64,7 @@ public class AparListPage extends Fragment implements AsyncExpandableListViewCal
     
     void populateInventory () {
         CollectionView.Inventory<String, Apar> inventory = new CollectionView.Inventory<> ();
+        aparList = HomeActivity.aparList;
     
         for (int i = 0; i < aparList.size (); i++)
             if (filter (aparList.get (i)))

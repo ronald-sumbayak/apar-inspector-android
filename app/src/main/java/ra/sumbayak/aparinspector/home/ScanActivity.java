@@ -86,6 +86,11 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
             showInvalidMessage ();
     }
     
+    @Override
+    public void onUpdateFailed () {
+        scannerView.resumeCameraPreview (this);
+    }
+    
     private void showInvalidMessage () {
         final AlertDialog.Builder builder = new AlertDialog.Builder (this);
         builder.setCancelable (false);
