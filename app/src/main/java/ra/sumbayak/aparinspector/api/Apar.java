@@ -1,7 +1,5 @@
 package ra.sumbayak.aparinspector.api;
 
-import android.util.Log;
-
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -68,7 +66,7 @@ public class Apar implements Serializable {
         return false;
     }
     
-    public boolean isLT6M () {
+    public boolean isGT6M () {
         if (pengecekan != null) {
             SimpleDateFormat sdf = new SimpleDateFormat ("y-M-d", Locale.getDefault ());
             try {
@@ -79,12 +77,11 @@ public class Apar implements Serializable {
     
                 int yearDiff = today.get (Calendar.YEAR) - pengecekan.get (Calendar.YEAR);
                 int monthDiff = (yearDiff * 12) + today.get (Calendar.MONTH) - pengecekan.get (Calendar.MONTH);
-                //            boolean sameDate = today.get (Calendar.DAY_OF_MONTH) == pengecekan.get (Calendar.DAY_OF_MONTH);
                 return monthDiff > 6;
             }
             catch (ParseException e) { e.printStackTrace (); }
         }
-        return false;
+        return true;
     }
     
     public String kondisi () {

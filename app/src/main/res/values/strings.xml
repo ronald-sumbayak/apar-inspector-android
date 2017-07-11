@@ -1,7 +1,3 @@
 <resources>
     <string name="app_name">APAR Inspector</string>
-    <string-array name="kondisi_choices">
-        <item>Baik</item>
-        <item>Tidak Baik</item>
-    </string-array>
 </resources>

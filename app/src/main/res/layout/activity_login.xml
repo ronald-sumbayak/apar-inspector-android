@@ -10,7 +10,6 @@
     >
     
     <ImageView
-        android:id="@+id/applogo"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="center"
@@ -44,13 +43,12 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/apptheme_textfield_activated_holo_light"
                 android:hint="Username"
-                android:imeOptions="flagNavigateNext"
+                android:imeOptions="actionNext"
                 android:lines="1"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:text="ronald"
                 android:textColor="@android:color/white"
-                tools:ignore="HardcodedText"
+                tools:ignore="Deprecated,HardcodedText"
                 />
             
         </android.support.design.widget.TextInputLayout>
@@ -69,7 +67,7 @@
                 android:background="@drawable/apptheme_textfield_activated_holo_light"
                 android:hint="Password"
                 android:inputType="textPassword"
-                android:text="[\\][\\][\\]"
+                android:text=""
                 android:textColor="@android:color/white"
                 android:textColorHint="@android:color/white"
                 tools:ignore="HardcodedText"

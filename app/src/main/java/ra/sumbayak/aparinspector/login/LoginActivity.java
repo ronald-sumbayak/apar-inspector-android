@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
@@ -14,6 +15,7 @@ import com.google.gson.annotations.SerializedName;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import ra.sumbayak.aparinspector.GlobalLoadingDialog;
 import ra.sumbayak.aparinspector.R;
 import ra.sumbayak.aparinspector.api.ApiInterface;
 import ra.sumbayak.aparinspector.api.ApiInterfaceBuilder;
@@ -22,9 +24,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static ra.sumbayak.aparinspector.Constant.SPNAME;
-import static ra.sumbayak.aparinspector.Constant.SERIALIZED_NAME_TOKEN;
-import static ra.sumbayak.aparinspector.Constant.SPKEY_TOKEN;
+import static ra.sumbayak.aparinspector.Constant.*;
 
 public class LoginActivity extends AppCompatActivity {
     
@@ -46,6 +46,8 @@ public class LoginActivity extends AppCompatActivity {
     
     @OnClick (R.id.login)
     public void login () {
+        GlobalLoadingDialog.show (this);
+        
         Call<JsonObject> call = apiInterface.token (new LoginCredentials ());
         call.enqueue (new Callback<JsonObject> () {
             @Override
@@ -60,18 +62,25 @@ public class LoginActivity extends AppCompatActivity {
                     editor.apply ();
                     
                     authenticate ();
+                    GlobalLoadingDialog.hide ();
+                }
+                else {
+                    GlobalLoadingDialog.hide ();
+                    Toast.makeText (LoginActivity.this, "Login failed", Toast.LENGTH_SHORT).show ();
                 }
             }
     
             @Override
             public void onFailure (@NonNull Call<JsonObject> call, @NonNull Throwable t) {
                 t.printStackTrace ();
+                GlobalLoadingDialog.hide ();
+                Toast.makeText (LoginActivity.this, "Login failed", Toast.LENGTH_SHORT).show ();
             }
         });
     }
     
     private void authenticate () {
-        startActivity (new Intent (getApplicationContext (), HomeActivity.class));
+        startActivity (new Intent (this, HomeActivity.class));
         finish ();
     }
     

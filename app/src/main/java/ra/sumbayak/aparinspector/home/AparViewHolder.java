@@ -1,7 +1,6 @@
 package ra.sumbayak.aparinspector.home;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -13,20 +12,18 @@ import butterknife.ButterKnife;
 import ra.sumbayak.aparinspector.R;
 import ra.sumbayak.aparinspector.api.Apar;
 
-import static ra.sumbayak.aparinspector.R.id.pengecekan;
-
-public class AparViewHolder {
+class AparViewHolder {
     
-    public static class Header extends AsyncHeaderViewHolder {
+    static class Header extends AsyncHeaderViewHolder {
         
         @BindView (R.id.aparname) TextView title;
     
-        public Header (View itemView, int groupOrdinal, AsyncExpandableListView asyncExpandableListView) {
+        Header (View itemView, int groupOrdinal, AsyncExpandableListView asyncExpandableListView) {
             super (itemView, groupOrdinal, asyncExpandableListView);
             ButterKnife.bind (this, itemView);
         }
         
-        public void bind (String title) {
+        void bind (String title) {
             this.title.setText (title);
         }
     
@@ -46,7 +43,7 @@ public class AparViewHolder {
         }
     }
     
-    public static class Item extends RecyclerView.ViewHolder {
+    static class Item extends RecyclerView.ViewHolder {
         
         @BindView (R.id.lokasi) TextView lokasi;
         @BindView (R.id.nomorlokasi) TextView nomorlokasi;
@@ -58,12 +55,12 @@ public class AparViewHolder {
         @BindView (R.id.inspector) TextView inspector;
         @BindView (R.id.catatan) TextView catatan;
     
-        public Item (View itemView) {
+        Item (View itemView) {
             super (itemView);
             ButterKnife.bind (this, itemView);
         }
         
-        public void bind (Apar apar) {
+        void bind (Apar apar) {
             lokasi.setText (apar.lokasi);
             nomorlokasi.setText (apar.nomorLokasi);
             jenis.setText (apar.jenis);

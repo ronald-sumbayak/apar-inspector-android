@@ -1,6 +1,5 @@
 package ra.sumbayak.aparinspector.home;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,15 +23,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ra.sumbayak.aparinspector.R;
 import ra.sumbayak.aparinspector.api.Apar;
-import ra.sumbayak.aparinspector.home.AparViewHolder;
-import ra.sumbayak.aparinspector.home.HomeActivity;
 
 import static ra.sumbayak.aparinspector.Constant.*;
 
 public class AparListPage extends Fragment implements AsyncExpandableListViewCallbacks<String, Apar> {
     
     @BindView (R.id.aelv_aparlist) AsyncExpandableListView<String, Apar> aparListView;
-    private final String LOG_TAG = "AparListPage#filter ";
     private List<Apar> aparList;
     private String filter;
     
@@ -58,17 +53,17 @@ public class AparListPage extends Fragment implements AsyncExpandableListViewCal
         populateInventory ();
     }
     
-    public boolean filter (Apar item) {
+    private boolean filter (Apar item) {
         if (filter == null) return true;
         switch (filter) {
             case REPORT_PAGE_TITLE_EXPIRED: return item.isExpired ();
-            case REPORT_PAGE_TITLE_BAD: return item.kondisi < 0;
-            case REPORT_PAGE_TITLE_LT_6_MONTH: return item.isLT6M ();
+            case REPORT_PAGE_TITLE_BAD: return item.kondisi < 1;
+            case REPORT_PAGE_TITLE_LT_6_MONTH: return item.isGT6M ();
             default: return false;
         }
     }
     
-    private void populateInventory () {
+    void populateInventory () {
         CollectionView.Inventory<String, Apar> inventory = new CollectionView.Inventory<> ();
     
         for (int i = 0; i < aparList.size (); i++)
@@ -76,7 +71,7 @@ public class AparListPage extends Fragment implements AsyncExpandableListViewCal
                 inventory
                     .newGroup (i)
                     .setHeaderItem (aparList.get (i).header ());
-    
+        
         aparListView.setHasFixedSize (true);
         aparListView.addItemDecoration (new DividerItemDecoration (getContext (), DividerItemDecoration.VERTICAL));
         aparListView.setLayoutManager (new LinearLayoutManager (getContext ()));

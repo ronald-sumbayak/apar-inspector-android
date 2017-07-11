@@ -14,7 +14,6 @@ public class Constant {
     public static final int CAMERA_PERMISSION_REQUEST_CODE = 12343;
     public static final int SCAN_DATA_DEFAULT_ID = -1;
     public static final String SCAN_DATA_KEY_ID = "id";
-    public static final String SCAN_DATA_KEY_OFFLINE = "offline";
     
     public static final String INSPECTION_FRAGMENT_DATA_KEY_APAR = "apar";
     public static final String INSPECTION_FRAGMENT_TAG = "Inspection Form";

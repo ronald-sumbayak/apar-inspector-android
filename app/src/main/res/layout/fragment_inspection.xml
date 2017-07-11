@@ -138,7 +138,6 @@
             >
             
             <android.support.v7.widget.AppCompatRadioButton
-                android:id="@+id/kondisi_good"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Baik"
@@ -147,7 +146,6 @@
                 />
             
             <android.support.v7.widget.AppCompatRadioButton
-                android:id="@+id/kondisi_bad"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Tidak Baik"

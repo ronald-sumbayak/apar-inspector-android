@@ -8,15 +8,18 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.View;
-import android.widget.*;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.annotations.SerializedName;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import ra.sumbayak.aparinspector.GlobalLoadingDialog;
 import ra.sumbayak.aparinspector.R;
 import ra.sumbayak.aparinspector.api.Apar;
 import ra.sumbayak.aparinspector.api.ApiInterfaceBuilder;
@@ -24,9 +27,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.R.attr.id;
-import static ra.sumbayak.aparinspector.Constant.INSPECTION_FRAGMENT_DATA_KEY_APAR;
-import static ra.sumbayak.aparinspector.Constant.INSPECTION_FRAGMENT_TAG;
+import static ra.sumbayak.aparinspector.Constant.*;
 
 public class InspectionFragment extends DialogFragment {
     
@@ -56,6 +57,7 @@ public class InspectionFragment extends DialogFragment {
     public void onCreate (@Nullable Bundle savedInstanceState) {
         super.onCreate (savedInstanceState);
         apar = (Apar) getArguments ().getSerializable (INSPECTION_FRAGMENT_DATA_KEY_APAR);
+        setCancelable (false);
     }
     
     @NonNull
@@ -84,39 +86,48 @@ public class InspectionFragment extends DialogFragment {
     
     @OnClick (R.id.confirm)
     public void confirm () {
-        RadioButton checked = (RadioButton) view.findViewById (kondisi.getCheckedRadioButtonId ());
-        
-        InspectionForm form = new InspectionForm (
-            checked.getText ().toString (),
-            catatan.getText ().toString ());
+        GlobalLoadingDialog.show (getContext ());
         
         ApiInterfaceBuilder
             .build (getContext ())
-            .inspect (apar.id, form)
+            .inspect (apar.id, new InspectionForm ())
             .enqueue (new Callback<Apar> () {
                 @Override
                 public void onResponse (@NonNull Call<Apar> call, @NonNull Response<Apar> response) {
                     if (response.isSuccessful ()) {
                         AparUpdater.update (getActivity ());
+                        GlobalLoadingDialog.hide ();
                         dismiss ();
+                    }
+                    else {
+                        GlobalLoadingDialog.hide ();
+                        Toast.makeText (getContext (), "Save failed", Toast.LENGTH_SHORT).show ();
                     }
                 }
     
                 @Override
                 public void onFailure (@NonNull Call<Apar> call, @NonNull Throwable t) {
-                    
+                    GlobalLoadingDialog.hide ();
+                    Toast.makeText (getContext (), "Save failed", Toast.LENGTH_SHORT).show ();
                 }
             });
     }
     
     public class InspectionForm {
+        
         @SerializedName ("kondisi") int kondisi;
         @SerializedName ("catatan") String catatan;
         
-        InspectionForm (String kondisi, String catatan) {
+        InspectionForm () {
+            String kondisi = ((RadioButton) view
+                .findViewById (InspectionFragment.this.kondisi.getCheckedRadioButtonId ()))
+                .getText ()
+                .toString ();
+            
             if (kondisi.equals ("Baik")) this.kondisi = 1;
             else this.kondisi = -1;
-            this.catatan = catatan;
+            
+            catatan = InspectionFragment.this.catatan.getText ().toString ();
         }
     }
 }

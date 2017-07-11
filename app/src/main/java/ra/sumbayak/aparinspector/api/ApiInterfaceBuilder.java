@@ -1,25 +1,17 @@
 package ra.sumbayak.aparinspector.api;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import java.io.IOException;
-import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.Executor;
 
-import okhttp3.*;
-import retrofit2.CallAdapter;
-import retrofit2.Converter;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static ra.sumbayak.aparinspector.Constant.SPKEY_TOKEN;
-import static ra.sumbayak.aparinspector.Constant.SPNAME;
+import static ra.sumbayak.aparinspector.Constant.*;
 
 public class ApiInterfaceBuilder {
     
