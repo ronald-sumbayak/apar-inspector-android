@@ -1,4 +1,4 @@
-package ra.sumbayak.aparinspector.home;
+package ra.sumbayak.aparinspector.inspector;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -21,6 +21,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ra.sumbayak.aparinspector.BaseActivity;
 import ra.sumbayak.aparinspector.R;
 import ra.sumbayak.aparinspector.api.Apar;
 
@@ -28,7 +29,7 @@ import static ra.sumbayak.aparinspector.Constant.*;
 
 public class AparListPage extends Fragment implements AsyncExpandableListViewCallbacks<String, Apar> {
     
-    @BindView (R.id.aelv_aparlist) AsyncExpandableListView<String, Apar> aparListView;
+    @BindView (R.id.aelv_list) AsyncExpandableListView<String, Apar> aparListView;
     private List<Apar> aparList;
     private String filter;
     
@@ -42,7 +43,7 @@ public class AparListPage extends Fragment implements AsyncExpandableListViewCal
     @Nullable
     @Override
     public View onCreateView (LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate (R.layout.fragment_aparlist, container, false);
+        return inflater.inflate (R.layout.fragment_aelv, container, false);
     }
     
     @Override
@@ -56,15 +57,15 @@ public class AparListPage extends Fragment implements AsyncExpandableListViewCal
         if (filter == null) return true;
         switch (filter) {
             case REPORT_PAGE_TITLE_EXPIRED: return item.isExpired ();
-            case REPORT_PAGE_TITLE_BAD: return item.kondisi < 1;
-            case REPORT_PAGE_TITLE_LT_6_MONTH: return item.isGT6M ();
+            case REPORT_PAGE_TITLE_BAD: return item.inspection.kondisi < 1;
+            case REPORT_PAGE_TITLE_LT_6_MONTH: return item.inspection.isGT6M ();
             default: return false;
         }
     }
     
     void populateInventory () {
         CollectionView.Inventory<String, Apar> inventory = new CollectionView.Inventory<> ();
-        aparList = HomeActivity.aparList;
+        aparList = BaseActivity.aparList;
     
         for (int i = 0; i < aparList.size (); i++)
             if (filter (aparList.get (i)))
@@ -90,7 +91,7 @@ public class AparListPage extends Fragment implements AsyncExpandableListViewCal
     public AsyncHeaderViewHolder newCollectionHeaderView (Context context, int groupOrdinal, ViewGroup parent) {
         View itemView = LayoutInflater
             .from (context)
-            .inflate (R.layout.headerview, parent, false);
+            .inflate (R.layout.headerview_apar, parent, false);
         return new AparViewHolder.Header (itemView, groupOrdinal, aparListView);
     }
     
@@ -98,7 +99,7 @@ public class AparListPage extends Fragment implements AsyncExpandableListViewCal
     public RecyclerView.ViewHolder newCollectionItemView (Context context, int groupOrdinal, ViewGroup parent) {
         return new AparViewHolder.Item (LayoutInflater
             .from (context)
-            .inflate (R.layout.itemview, parent, false));
+            .inflate (R.layout.itemview_apar, parent, false));
     }
     
     @Override

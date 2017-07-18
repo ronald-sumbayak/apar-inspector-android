@@ -1,4 +1,4 @@
-package ra.sumbayak.aparinspector.home;
+package ra.sumbayak.aparinspector.inspector;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -65,11 +65,11 @@ class AparViewHolder {
             nomorlokasi.setText (apar.nomorLokasi);
             jenis.setText (apar.jenis);
             kapasitas.setText (apar.kapasitas ());
-            pengecekan.setText (apar.pengecekan ());
-            kondisi.setText (apar.kondisi ());
             kadaluarsa.setText (apar.kadaluarsa ());
-            inspector.setText (apar.inspector ());
-            catatan.setText (apar.catatan ());
+            pengecekan.setText (apar.inspection.waktu_inspeksi ());
+            kondisi.setText (apar.inspection.kondisi ());
+            inspector.setText (apar.inspection.inspector ());
+            catatan.setText (apar.inspection.catatan ());
         }
     }
 }

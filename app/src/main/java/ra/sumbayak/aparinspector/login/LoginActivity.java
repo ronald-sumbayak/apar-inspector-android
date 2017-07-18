@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -15,82 +15,125 @@ import com.google.gson.annotations.SerializedName;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import ra.sumbayak.aparinspector.GlobalLoadingDialog;
+import ra.sumbayak.aparinspector.BaseActivity;
 import ra.sumbayak.aparinspector.R;
-import ra.sumbayak.aparinspector.api.ApiInterface;
 import ra.sumbayak.aparinspector.api.ApiInterfaceBuilder;
-import ra.sumbayak.aparinspector.home.HomeActivity;
-import retrofit2.Call;
-import retrofit2.Callback;
+import ra.sumbayak.aparinspector.api.QRCallback;
+import ra.sumbayak.aparinspector.inspector.InspectorActivity;
+import ra.sumbayak.aparinspector.supervisor.SupervisorActivity;
 import retrofit2.Response;
 
 import static ra.sumbayak.aparinspector.Constant.*;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
     
-    @BindView (R.id.username) EditText username;
-    @BindView (R.id.password) EditText password;
-    private ApiInterface apiInterface;
+    @BindView (R.id.username) EditText et_username;
+    @BindView (R.id.password) EditText et_password;
+    private LoginCredentials loginCredentials;
     
     @Override
     protected void onCreate (@Nullable Bundle savedInstanceState) {
         super.onCreate (savedInstanceState);
         
-        if (getSharedPreferences (SPNAME, MODE_PRIVATE).contains (SPKEY_TOKEN))
+        SharedPreferences sp = getSharedPreferences (SPNAME, MODE_PRIVATE);
+        if (sp.contains (SPKEY_TOKEN) && sp.contains (SPKEY_ACCESS_LEVEL))
             authenticate ();
+        else
+            sp
+                .edit ()
+                .remove (SPKEY_TOKEN)
+                .remove (SPKEY_ACCESS_LEVEL)
+                .apply ();
         
         setContentView (R.layout.activity_login);
         ButterKnife.bind (this);
-        apiInterface = ApiInterfaceBuilder.build (this);
     }
     
     @OnClick (R.id.login)
     public void login () {
-        GlobalLoadingDialog.show (this);
+        showProgressDialog ();
+        loginCredentials = new LoginCredentials ();
         
-        Call<JsonObject> call = apiInterface.token (new LoginCredentials ());
-        call.enqueue (new Callback<JsonObject> () {
-            @Override
-            public void onResponse (@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
-                if (response.isSuccessful ()) {
+        ApiInterfaceBuilder
+            .build (this)
+            .token (loginCredentials)
+            .enqueue (new QRCallback<JsonObject> () {
+                @Override
+                public void onSuccessful (@NonNull Response<JsonObject> response) {
+                    Log.e ("LoginActivity", response.toString ());
                     JsonObject body = response.body ();
                     assert body != null;
-                    String token = body.get (SERIALIZED_NAME_TOKEN).getAsString ();
+                    getSharedPreferences (SPNAME, MODE_PRIVATE)
+                        .edit ()
+                        .putString (SPKEY_TOKEN, body
+                            .get (SERIALIZED_NAME_TOKEN)
+                            .getAsString ())
+                        .apply ();
                     
-                    SharedPreferences.Editor editor = getSharedPreferences (SPNAME, MODE_PRIVATE).edit ();
-                    editor.putString (SPKEY_TOKEN, token);
-                    editor.apply ();
+                    ApiInterfaceBuilder
+                        .build (getApplicationContext ())
+                        .user (loginCredentials.username)
+                        .enqueue (new QRCallback<JsonObject> () {
+                            @Override
+                            public void onSuccessful (@NonNull Response<JsonObject> response) {
+                                Log.e ("LoginActivity", response.toString ());
+                                JsonObject body = response.body ();
+                                assert body != null;
+                                getSharedPreferences (SPNAME, MODE_PRIVATE)
+                                    .edit ()
+                                    .putInt (SPKEY_ACCESS_LEVEL, body
+                                        .get (SERIALIZED_NAME_ACCESS_LEVEL)
+                                        .getAsInt ())
+                                    .apply ();
+                                authenticate ();
+                            }
     
-                    GlobalLoadingDialog.hide ();
-                    authenticate ();
+                            @Override
+                            protected void onFailure () {
+                                LoginActivity.this.onFailure ();
+                            }
+                        });
                 }
-                else {
-                    GlobalLoadingDialog.hide ();
-                    Toast.makeText (LoginActivity.this, "Login failed", Toast.LENGTH_SHORT).show ();
-                }
-            }
     
-            @Override
-            public void onFailure (@NonNull Call<JsonObject> call, @NonNull Throwable t) {
-                t.printStackTrace ();
-                GlobalLoadingDialog.hide ();
-                Toast.makeText (LoginActivity.this, "Login failed", Toast.LENGTH_SHORT).show ();
-            }
-        });
+                @Override
+                protected void onFailure () {
+                    LoginActivity.this.onFailure ();
+                }
+            });
     }
     
     private void authenticate () {
-        startActivity (new Intent (this, HomeActivity.class));
+        int access_level = getSharedPreferences (SPNAME, MODE_PRIVATE)
+            .getInt (SPKEY_ACCESS_LEVEL, 2);
+        if (access_level == 2)
+            startActivity (new Intent (this, InspectorActivity.class));
+        else
+            startActivity (new Intent (this, SupervisorActivity.class));
         finish ();
+    }
+    
+    private void onFailure () {
+        dismissProgressDialog ();
+        Toast.makeText (LoginActivity.this, "Login failed", Toast.LENGTH_SHORT).show ();
+    }
+    
+    @Override
+    public void onUpdate () {
+        
+    }
+    
+    @Override
+    public void onUpdateFailed () {
+        
     }
     
     public class LoginCredentials {
         @SerializedName ("username") String username;
         @SerializedName ("password") String password;
         
-        LoginCredentials () {
-            this.username = LoginActivity.this.username.getText ().toString ();
-            this.password = LoginActivity.this.password.getText ().toString ();
+        private LoginCredentials () {
+            username = et_username.getText ().toString ();
+            password = et_password.getText ().toString ();
         }
     }
 }

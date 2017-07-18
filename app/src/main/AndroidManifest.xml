@@ -24,8 +24,9 @@
             </intent-filter>
         </activity>
         
-        <activity android:name=".home.HomeActivity"/>
-        <activity android:name=".home.ScanActivity"/>
+        <activity android:name=".inspector.InspectorActivity"/>
+        <activity android:name=".supervisor.SupervisorActivity"/>
+        <activity android:name=".inspector.ScanActivity"/>
 
     </application>
 

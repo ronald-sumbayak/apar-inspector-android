@@ -1,4 +1,4 @@
-package ra.sumbayak.aparinspector.home;
+package ra.sumbayak.aparinspector.inspector;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -14,15 +14,17 @@ import android.widget.*;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.json.JSONObject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import ra.sumbayak.aparinspector.GlobalLoadingDialog;
+import ra.sumbayak.aparinspector.BaseActivity;
+import ra.sumbayak.aparinspector.DataUpdater;
 import ra.sumbayak.aparinspector.R;
 import ra.sumbayak.aparinspector.api.Apar;
 import ra.sumbayak.aparinspector.api.ApiInterfaceBuilder;
-import retrofit2.Call;
-import retrofit2.Callback;
+import ra.sumbayak.aparinspector.api.QRCallback;
 import retrofit2.Response;
 
 import static ra.sumbayak.aparinspector.Constant.*;
@@ -38,11 +40,12 @@ public class InspectionFragment extends DialogFragment {
     @BindView (R.id.confirm) Button confirm;
     private Apar apar;
     private View view;
+    private InspectorActivity activity;
     
     public static InspectionFragment newInstance (int id) {
         InspectionFragment fragment = new InspectionFragment ();
         Bundle args = new Bundle ();
-        args.putSerializable (INSPECTION_FRAGMENT_DATA_KEY_APAR, HomeActivity.aparMap.get (id));
+        args.putSerializable (INSPECTION_FRAGMENT_DATA_KEY_APAR, BaseActivity.aparMap.get (id));
         fragment.setArguments (args);
         return fragment;
     }
@@ -57,6 +60,7 @@ public class InspectionFragment extends DialogFragment {
         super.onCreate (savedInstanceState);
         apar = (Apar) getArguments ().getSerializable (INSPECTION_FRAGMENT_DATA_KEY_APAR);
         setCancelable (false);
+        activity = (InspectorActivity) getActivity ();
     }
     
     @NonNull
@@ -92,35 +96,40 @@ public class InspectionFragment extends DialogFragment {
     
     @OnClick (R.id.confirm)
     public void confirm () {
-        GlobalLoadingDialog.show (getContext ());
-        
+        activity.showProgressDialog ();
         ApiInterfaceBuilder
             .build (getContext ())
-            .inspect (apar.id, new InspectionForm ())
-            .enqueue (new Callback<Apar> () {
+            .inspect (new InspectionForm ())
+            .enqueue (new QRCallback<JSONObject> () {
                 @Override
-                public void onResponse (@NonNull Call<Apar> call, @NonNull Response<Apar> response) {
-                    if (response.isSuccessful ()) {
-                        AparUpdater.update (getActivity ());
-                        GlobalLoadingDialog.hide ();
-                        dismiss ();
-                    }
-                    else {
-                        GlobalLoadingDialog.hide ();
-                        Toast.makeText (getContext (), "Save failed", Toast.LENGTH_SHORT).show ();
-                    }
+                public void onSuccessful (@NonNull Response<JSONObject> response) {
+                    DataUpdater.update (getActivity (), new DataUpdater.OnDataUpdateListener () {
+                        @Override
+                        public void onUpdate () {
+                            activity.dismissProgressDialog ();
+                            cancel ();
+                            Toast.makeText (activity, "Success", Toast.LENGTH_SHORT).show ();
+                        }
+    
+                        @Override
+                        public void onUpdateFailed () {
+                            activity.dismissProgressDialog ();
+                            Toast.makeText (activity, "Failed. Please try again.", Toast.LENGTH_SHORT).show ();
+                        }
+                    });
                 }
     
                 @Override
-                public void onFailure (@NonNull Call<Apar> call, @NonNull Throwable t) {
-                    GlobalLoadingDialog.hide ();
-                    Toast.makeText (getContext (), "Save failed", Toast.LENGTH_SHORT).show ();
+                protected void onFailure () {
+                    activity.dismissProgressDialog ();
+                    Toast.makeText (activity, "Failed. Please try again.", Toast.LENGTH_SHORT).show ();
                 }
             });
     }
     
     public class InspectionForm {
         
+        @SerializedName ("id") int id;
         @SerializedName ("kondisi") int kondisi;
         @SerializedName ("catatan") String catatan;
         
@@ -131,8 +140,9 @@ public class InspectionFragment extends DialogFragment {
                 .toString ();
             
             if (kondisi.equals ("Baik")) this.kondisi = 1;
-            else this.kondisi = -1;
+            else this.kondisi = 0;
             
+            id = apar.id;
             catatan = InspectionFragment.this.catatan.getText ().toString ();
         }
     }

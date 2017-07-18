@@ -2,21 +2,25 @@ package ra.sumbayak.aparinspector.api;
 
 import com.google.gson.JsonObject;
 
+import org.json.JSONObject;
+
 import java.util.List;
 
-import okhttp3.ResponseBody;
-import ra.sumbayak.aparinspector.home.InspectionFragment;
+import ra.sumbayak.aparinspector.inspector.InspectionFragment;
 import ra.sumbayak.aparinspector.login.LoginActivity;
+import ra.sumbayak.aparinspector.supervisor.InspectionListPage;
 import retrofit2.Call;
-import retrofit2.http.*;
+import retrofit2.http.Body;
+import retrofit2.http.GET;
+import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 public interface ApiInterface {
-    @POST ("api-token-auth") Call<JsonObject> token (@Body LoginActivity.LoginCredentials credentials);
-    @GET ("all") Call<List<Apar>> all ();
-    @GET ("{id}") Call<Apar> get (@Path ("id") int id);
-    @PUT ("{id}") Call<Apar> put (@Path ("id") int id, @Body Apar apar);
-    @DELETE ("{id}") Call<ResponseBody> delete (@Path ("id") int id);
-    @POST ("add") Call<Apar> add (@Body Apar apar);
-    @POST ("inspect/{id}") Call<Apar> inspect (@Path ("id") int id, @Body InspectionFragment.InspectionForm form);
-    @POST ("refill/{id}") Call<Apar> refill (@Path ("id") int id);
+    @POST ("token") Call<JsonObject> token (@Body LoginActivity.LoginCredentials credentials);
+    @GET ("user/{username}") Call<JsonObject> user (@Path ("username") String username);
+    @GET ("apar/all") Call<List<Apar>> aparAll ();
+    @GET ("apar/detail/{id}") Call<Apar> aparDetail (@Path ("id") int id);
+    @GET ("inspection/all") Call<List<Inspection>> inspectionAll ();
+    @POST ("inspect") Call<JSONObject> inspect (@Body InspectionFragment.InspectionForm form);
+    @POST ("verify") Call<JSONObject> verify (@Body InspectionListPage.VerificationForm form);
 }

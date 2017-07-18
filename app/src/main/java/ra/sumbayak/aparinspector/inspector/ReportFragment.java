@@ -1,4 +1,4 @@
-package ra.sumbayak.aparinspector.home;
+package ra.sumbayak.aparinspector.inspector;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -46,7 +46,7 @@ public class ReportFragment extends Fragment {
         if (requestCode == SCAN_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             final int id = data.getIntExtra (SCAN_DATA_KEY_ID, SCAN_DATA_DEFAULT_ID);
             
-            HomeActivity activity = (HomeActivity) getActivity ();
+            InspectorActivity activity = (InspectorActivity) getActivity ();
             InspectionFragment.show (activity, id);
             activity.bnv.setSelectedItemId (R.id.bnv_report);
         }

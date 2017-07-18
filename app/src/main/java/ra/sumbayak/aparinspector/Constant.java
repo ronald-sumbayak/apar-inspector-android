@@ -2,7 +2,9 @@ package ra.sumbayak.aparinspector;
 
 public class Constant {
     public static final String SERIALIZED_NAME_TOKEN = "token";
+    public static final String SERIALIZED_NAME_ACCESS_LEVEL = "access_level";
     public static final String SPKEY_TOKEN = "Token";
+    public static final String SPKEY_ACCESS_LEVEL = "Access Level";
     public static final String SPNAME = "AparInspector";
     
     public static final String REPORT_PAGE_TITLE_EXPIRED = "Expired";

@@ -1,4 +1,4 @@
-package ra.sumbayak.aparinspector.home;
+package ra.sumbayak.aparinspector.inspector;
 
 import android.Manifest;
 import android.content.DialogInterface;
@@ -14,10 +14,12 @@ import android.support.v7.app.AppCompatActivity;
 import com.google.zxing.Result;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
+import ra.sumbayak.aparinspector.BaseActivity;
+import ra.sumbayak.aparinspector.DataUpdater;
 
 import static ra.sumbayak.aparinspector.Constant.*;
 
-public class ScanActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler, AparUpdater.OnAparUpdateListener {
+public class ScanActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler, DataUpdater.OnDataUpdateListener {
     
     private ZXingScannerView scannerView;
     private int id;
@@ -33,10 +35,10 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
     public void handleResult (final Result result) {
         try {
             id = Integer.parseInt (result.getText ());
-            if (HomeActivity.aparMap.indexOfKey (id) >= 0)
+            if (BaseActivity.aparMap.indexOfKey (id) >= 0)
                 returnData (id);
             else
-                AparUpdater.update (this, this);
+                DataUpdater.update (this, this);
         }
         catch (NumberFormatException e) { showInvalidMessage (); }
     }
@@ -80,7 +82,7 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
     
     @Override
     public void onUpdate () {
-        if (HomeActivity.aparMap.indexOfKey (id) >= 0)
+        if (BaseActivity.aparMap.indexOfKey (id) >= 0)
             returnData (id);
         else
             showInvalidMessage ();

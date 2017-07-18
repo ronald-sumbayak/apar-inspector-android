@@ -11,13 +11,14 @@ import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static ra.sumbayak.aparinspector.Constant.*;
+import static ra.sumbayak.aparinspector.Constant.SPKEY_TOKEN;
+import static ra.sumbayak.aparinspector.Constant.SPNAME;
 
 public class ApiInterfaceBuilder {
     
     public static ApiInterface build (Context context) {
         Retrofit.Builder builder = new Retrofit.Builder ()
-            .baseUrl ("https://apar.herokuapp.com/apar/")
+            .baseUrl ("http://apar.herokuapp.com/rest-api/")
             .addConverterFactory (GsonConverterFactory.create ());
     
         final String token = context
