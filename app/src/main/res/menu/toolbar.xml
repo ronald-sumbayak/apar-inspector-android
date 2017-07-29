@@ -14,6 +14,14 @@
         />
     
     <item
+        android:id="@+id/export_to_excel"
+        android:icon="@drawable/ic_download"
+        app:showAsAction="ifRoom"
+        android:title="Download as Excel"
+        tools:ignore="HardcodedText"
+        />
+    
+    <item
         android:id="@+id/logout"
         android:icon="@drawable/ic_logout"
         app:showAsAction="ifRoom"

@@ -2,6 +2,7 @@ package ra.sumbayak.aparinspector;
 
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.util.SparseArray;
 
 import java.util.List;

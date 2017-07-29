@@ -27,6 +27,19 @@
         <activity android:name=".inspector.InspectorActivity"/>
         <activity android:name=".supervisor.SupervisorActivity"/>
         <activity android:name=".inspector.ScanActivity"/>
+        
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}"
+            android:grantUriPermissions="true"
+            android:exported="false"
+            >
+            
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths"
+                />
+        </provider>
 
     </application>
 

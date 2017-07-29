@@ -165,13 +165,21 @@
     </LinearLayout>
     
     <LinearLayout
+        android:id="@+id/inspection_data"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingBottom="10dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
+        android:visibility="gone"
         >
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            >
         
         <TextView
             android:layout_width="wrap_content"
@@ -190,7 +198,7 @@
         
     </LinearLayout>
     
-    <LinearLayout
+        <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -214,31 +222,33 @@
             android:layout_height="wrap_content"
             />
         
-    </LinearLayout>
-    
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="10dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        >
+        </LinearLayout>
         
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Catatan"
-            android:textColor="@color/aparItemViewAttribute"
-            android:textStyle="bold"
-            tools:ignore="HardcodedText"
-            />
-    
-        <TextView
-            android:id="@+id/catatan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
+            android:orientation="vertical"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            >
+            
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Catatan"
+                android:textColor="@color/aparItemViewAttribute"
+                android:textStyle="bold"
+                tools:ignore="HardcodedText"
+                />
+        
+            <TextView
+                android:id="@+id/catatan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+            
+        </LinearLayout>
         
     </LinearLayout>
         

@@ -18,7 +18,7 @@ public class ApiInterfaceBuilder {
     
     public static ApiInterface build (Context context) {
         Retrofit.Builder builder = new Retrofit.Builder ()
-            .baseUrl ("http://apar.herokuapp.com/rest-api/")
+            .baseUrl ("http://apar.herokuapp.com/api/")
             .addConverterFactory (GsonConverterFactory.create ());
     
         final String token = context

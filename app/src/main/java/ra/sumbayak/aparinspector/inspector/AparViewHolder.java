@@ -1,7 +1,9 @@
 package ra.sumbayak.aparinspector.inspector;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ericliu.asyncexpandablelist.async.AsyncExpandableListView;
@@ -51,6 +53,8 @@ class AparViewHolder {
         @BindView (R.id.kapasitas) TextView kapasitas;
         @BindView (R.id.kadaluarsa) TextView kadaluarsa;
         @BindView (R.id.kondisi) TextView kondisi;
+        
+        @BindView (R.id.inspection_data) LinearLayout inspectiondata;
         @BindView (R.id.pengecekan) TextView pengecekan;
         @BindView (R.id.inspector) TextView inspector;
         @BindView (R.id.catatan) TextView catatan;
@@ -66,10 +70,18 @@ class AparViewHolder {
             jenis.setText (apar.jenis);
             kapasitas.setText (apar.kapasitas ());
             kadaluarsa.setText (apar.kadaluarsa ());
-            pengecekan.setText (apar.inspection.waktu_inspeksi ());
-            kondisi.setText (apar.inspection.kondisi ());
-            inspector.setText (apar.inspection.inspector ());
-            catatan.setText (apar.inspection.catatan ());
+            
+            if (apar.inspeksi > 0) {
+                inspectiondata.setVisibility (View.VISIBLE);
+                kondisi.setText (apar.inspection.kondisi ());
+                pengecekan.setText (apar.inspection.waktu_inspeksi ());
+                inspector.setText (apar.inspection.inspector ());
+                catatan.setText (apar.inspection.catatan ());
+            }
+            else {
+                inspectiondata.setVisibility (View.GONE);
+                kondisi.setText ("Unknown");
+            }
         }
     }
 }
